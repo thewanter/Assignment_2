@@ -46,6 +46,15 @@ public class BingoCard {
         }
     }
     
+
+    public void addValue(int row, int col, String value) {
+        matrix[row][col] = value;
+    }
+
+    public String getValue(int row, int col) {
+
+        return matrix[row][col];
+    }
     /**
      * Display the matrix
      * @return void
@@ -60,6 +69,5 @@ public class BingoCard {
             }
             System.out.println();
         }
-
     }
 }
