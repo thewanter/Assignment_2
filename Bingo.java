@@ -11,11 +11,15 @@ public class Bingo {
     private static final String WIN ="BINGO";
     private static final Random random = new Random();
     private static ArrayList<BingoCard> cards = new ArrayList<>();
+    //private final String[][] matrix = new String[5][5];
+
     
     public static void main(String[] args) {
+        Scanner scnr = new Scanner(System.in);
         System.out.println("Assignment 2: BINGO!");
         loadCards("BingoCards.txt");
-        displayCards(); 
+        //displayCards(); 
+        randomPlay(scnr);
         // while (true) {
         //     int choice;
         //     Scanner scnr = new Scanner(System.in);
@@ -48,6 +52,24 @@ public class Bingo {
 
     }
     
+    public static boolean isSubset(ArrayList<Integer> subset, ArrayList<Integer> set) {
+        if (subset.size() > set.size()) {
+            return false;
+        }
+        for (int i = 0; i < subset.size(); i++) {
+            boolean Nflag = false;
+            for(int j = 0; j < set.size(); j++) {
+                if(subset.get(i) == set.get(j)) {
+                    Nflag=true;
+                }
+                
+            }
+            if(Nflag==false) {
+                return false;
+            }
+        }
+        return true;
+    }
     /**
      * Loads Bingo cards from a specified file.
      * Reads the file line by line, identifies card headers, and fills card matrix.
@@ -82,8 +104,124 @@ public class Bingo {
     }
     
     private static void playGame(Scanner scnr, BingoCard card, boolean isRand) {
+        ArrayList<Integer> storeAllInputs = new ArrayList<>();
+        ArrayList<ArrayList<Integer>> checkAllInputs = getBingoResutls(card);
 
+        card.display();
+        System.out.println("Enter user's input: ");
+        String usrInput = scnr.nextLine();
+        while(!usrInput.equals("BINGO")) {
+            char firstLetter=usrInput.charAt(0);
+            System.out.println(firstLetter);
+            char secondLetter=usrInput.charAt(1);
+            int row =0 ,col = 0;
+            switch(firstLetter){
+                case 'B':
+                    row = 0;
+                    break;
+                case 'I':
+                    row = 1;
+                    break;
+                case 'N':
+                    row = 2;
+                    break;
+                case 'G':
+                    row = 3;
+                    break;
+                case 'O':
+                    row = 4;
+                    break;
+                default:
+                    System.out.println("haha");
+                    break;
+            }
+
+            switch(secondLetter){
+                case 'B':
+                    col = 0;
+                    break;
+                case 'I':
+                    col = 1;
+                    break;
+                case 'N':
+                    col = 2;
+                    break;
+                case 'G':
+                    col = 3;
+                    break;
+                case 'O':
+                    col = 4;
+                    break;
+                default:
+                    System.out.println("haha");
+                    break;
+            }
+            if(card.getValue(row, col).equals("XX")) {
+                System.out.println("You already chose this location");
+            }
+            else {
+                storeAllInputs.add(Integer.parseInt(card.getValue(row, col)));
+                card.addValue(row, col, "XX");
+            }
+            card.display();
+            System.out.println("Enter user's input: ");
+            usrInput = scnr.nextLine();
+            
+        }
+        boolean flag = false;
+        for (int i = 0; i<checkAllInputs.size();i ++) {
+            
+            if(isSubset(checkAllInputs.get(i), storeAllInputs)) {
+                flag=true;
+                System.out.println(flag);
+            }
+        }
+        if(flag==false) {
+            System.out.println("You lose!");
+        }
+        else {
+            System.out.println("You won!");
+        }
+        
     }
+
+    public static ArrayList<ArrayList<Integer>> getBingoResutls(BingoCard selectedCard) {
+        ArrayList<ArrayList<Integer>> result = new ArrayList<>();
+        for(int i=0; i<5; i++) {
+            ArrayList<Integer> getColumns = new ArrayList<>();
+            for(int j=0; j<5;j++) {
+                getColumns.add(Integer.parseInt(selectedCard.getValue(i,j)));
+            }
+            result.add(getColumns);
+
+        }
+
+        for(int i=0; i<5; i++) {
+            ArrayList<Integer> getRows = new ArrayList<>();
+            for(int j=0; j<5;j++) {
+                getRows.add(Integer.parseInt(selectedCard.getValue(j,i)));
+            }
+            result.add(getRows);
+
+        }
+        //First Diagonal
+        ArrayList<Integer> getFirstDiagonal = new ArrayList<>();
+        ArrayList<Integer> getSecondDiagonal = new ArrayList<>();
+
+        for(int i=0; i < 5;i++){
+            getFirstDiagonal.add(Integer.parseInt(selectedCard.getValue(i,i)));
+        }
+    
+        result.add(getFirstDiagonal);
+        //Second Diagonal
+        for(int j=4; j >= 0;j--) {
+            int i = 0;
+            getSecondDiagonal.add(Integer.parseInt(selectedCard.getValue(j,i)));
+            i++;
+        }
+        result.add(getSecondDiagonal);
+        return result;
+    } 
 
     /**
      * Displays all loaded Bingo cards.
