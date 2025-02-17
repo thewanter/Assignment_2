@@ -1,20 +1,25 @@
 /**
  * @author: Thanh An Vu
- * @version: 1.0
+ * @version: 1.3
  * Date created: 2/4/2025
  */
 public class BingoCard {
     private final String id;
     private final String[][] matrix = new String[5][5];
-    private static final String BINGO = "BINGO At UW-Stout";
+    private static final String BINGO = "BINGO";
 
     public BingoCard(String id) {
         this.id = id;
     }
 
+    /**
+     * Get the id of selected card
+     * @return id of selected card
+    */
     public String getID() {
         return id;
     }
+    
     /**
      * Adds a row of numbers to the Bingo card at the specified index.
      * Trims spaces, validates the row format, and ensures it contains exactly 5 numbers.
@@ -47,22 +52,39 @@ public class BingoCard {
     }
     
 
+    /**
+     * Add value at the current position
+     * @param row the current row of the matrix
+     * @param col the current column of the matrix
+     * @param value value that you want to add
+     * @return matrix[row][col] value at the current position
+     */
     public void addValue(int row, int col, String value) {
         matrix[row][col] = value;
     }
 
+    /**
+     * Get value at the current position
+     * @param row the current row of the matrix
+     * @param col the current column of the matrix
+     * @return matrix[row][col] value at the current position
+     */
     public String getValue(int row, int col) {
-
         return matrix[row][col];
     }
+
+
     /**
      * Display the matrix
      * @return void
      */
     public void display() {
         System.out.println("\n" + id);
+        System.out.println("-------------------------------------------");
         System.out.println("\tB\tI\tN\tG\tO");
+        System.out.println("-------------------------------------------");
         for (int i = 0; i < 5; i++) {
+            //Display the each letter in the "BINGO" word seperately and vertically
             System.out.print(BINGO.charAt(i) + "\t");
             for (int j = 0; j < 5; j++) {
                 System.out.print(matrix[i][j] + "\t");
