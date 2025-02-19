@@ -8,6 +8,11 @@ public class BingoCard {
     private final String[][] matrix = new String[5][5];
     private static final String BINGO = "BINGO";
 
+    /**
+     * Constructor for the BingoCard class.
+     * Initializes a BingoCard object with the specified ID.
+     * @param id a String representing the ID of the BingoCard
+     */
     public BingoCard(String id) {
         this.id = id;
     }
@@ -31,7 +36,7 @@ public class BingoCard {
     public void addRow(String row, int rowIndex) {
         row = row.trim();
         if (row.isEmpty()) {
-            System.out.println("Skipping empty row...");
+            System.out.println("Skipping empty row!");
             return;
         }
     
@@ -51,7 +56,6 @@ public class BingoCard {
         }
     }
     
-
     /**
      * Add value at the current position
      * @param row the current row of the matrix
@@ -72,8 +76,7 @@ public class BingoCard {
     public String getValue(int row, int col) {
         return matrix[row][col];
     }
-
-
+    
     /**
      * Display the matrix
      * @return void

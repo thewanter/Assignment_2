@@ -10,13 +10,20 @@ import java.util.*;
 public class Bingo {
     private static final Random random = new Random();
     private static ArrayList<BingoCard> cards = new ArrayList<>();
-    
+    private static ArrayList<Integer> alreadySelectedCard = new ArrayList<>();
+
+    /**
+     * The main method serves as the entry point for the Bingo game application.
+     * It initializes the scanner for user input, loads the Bingo cards from a file,
+     * and presents the user with options to play in random or manual mode.
+     * It handles user input, ensures valid choices, and directs the gameplay accordingly
+     * @param args command line arguments (not used in this application)
+     */
     public static void main(String[] args) {
         Scanner scnr = new Scanner(System.in);
         System.out.println("Assignment 2: BINGO!");
         loadCards("BingoCards.txt");
         //displayCards(); 
-        
         while (true) {
             System.out.println("Welcome to UW-STOUT BINGO!" + "\n" +
                             "Enter (1) for Random Play" + "\n" +
@@ -34,40 +41,76 @@ public class Bingo {
             }
             catch (Exception e) {
                 System.out.println("Invalid input, Please enter a number(1 or 2):");
-                scnr.next(); //Clear valid input
+                // scnr.next(); //Clear valid input
             }
         }
-        
-
     }
     /**
      * Random play function that receive a random card from the array list 
      * @param scnr to get input from users
      */
     private static void randomPlay(Scanner scnr) {
-        int cardID = random.nextInt(cards.size());
-        System.out.println("Select Card: " + cardID);
+        int cardID = random.nextInt(cards.size()); //0-7
+        //System.out.println("Select Card: " + (cardID + 1));
+        //Update the cardID value to match with the order of the list
         BingoCard selectedCard = cards.get(cardID);
+        alreadySelectedCard.add(cardID); //Integer storing val (0-7)
         BingoCaller callObject = new BingoCaller();
-        playGame(scnr, selectedCard, true, callObject);
+        boolean endRandomMode = false;
 
+        int newCardID = 0;
+        while(!endRandomMode) {
+                do {
+                    Random randCardID = new Random();
+                    newCardID = randCardID.nextInt(cards.size()); //0-7
+                }
+                while(alreadySelectedCard.contains(newCardID));
+                //System.out.println("Your current card is: " + (newCardID+1));
+                //Get a new card
+                selectedCard = cards.get(newCardID);
+                //selectedCard.display();
+                //Store this card id into alreadySelectedCard
+                alreadySelectedCard.add(newCardID);
+                System.out.println("Select Card: " + (newCardID + 1));
+                //shuffle the list to make sure there is no duplicated combination
+                callObject.listChanging();
+                endRandomMode = randomGameplay(selectedCard, true, callObject);
+        }
     }
-    //Manual Play
+
+    /**
+     * This method allows the user to manually play the Bingo game. It displays the available cards and prompts the user to pick a card by entering its ID.
+     * It ensures that the user input is an integer within the valid range (1-8). If the input is invalid, it prompts the user to try again.
+     * @param scnr the Scanner object to receive user input
+     */
     private static void manualPlay(Scanner scnr) {
         displayCards();
-        System.out.println("Pick the card that you want, enter the id of the card (1-9):");
-        int cardID = scnr.nextInt();
-        BingoCard selectedCard = cards.get(cardID);
-        System.out.println("That's it");
+        int cardID = -1;
+        boolean validInput = false;
+
+        while (!validInput) {
+            System.out.println("Pick the card that you want, enter the id of the card (1-8):");
+            try {
+                cardID = scnr.nextInt();
+                if (cardID >= 1 && cardID <= 8) {
+                    validInput = true;
+                } else {
+                    System.out.println("Invalid input. Please enter a number between 1 and 8.");
+                }
+            } catch (InputMismatchException e) {
+                System.out.println("Invalid input. Please enter an integer.");
+                scnr.next(); // Clear the invalid input
+            }
+        }
+        BingoCard selectedCard = cards.get(cardID - 1);
+        manualGameplay(selectedCard, cardID);
     }
-    
-    /**
-     * Function to check if the array list storing the users input is inside the a\
-     * the array list storing a set of correct answers. 
-     * @param subset
-     * @param set
-     * @return false if the subset size is greater than set size
-     * @return 
+     /**
+     * Checks if the given subset list is entirely contained within the set list.
+     * @param subset The list of integers representing the subset.
+     * @param set The list of integers representing the full set.
+     * @return true if all elements of the subset are present in the set, otherwise false.
+     * Returns false if the subset size is greater than the set size.
      */
     public static boolean isSubset(ArrayList<Integer> subset, ArrayList<Integer> set) {
         if (subset.size() > set.size()) {
@@ -86,12 +129,12 @@ public class Bingo {
         }
         return true;
     }
+
     /**
      * Loads Bingo cards from a specified file.
      * Reads the file line by line, identifies card headers, and fills card matrix.
      * Skips empty lines and ensures each card has exactly 5 rows.
      * @param filename The name of the file containing Bingo card data.
-     * @return void
      */
     private static void loadCards(String filename) {
         try (BufferedReader reader = new BufferedReader(new FileReader(filename))) {
@@ -120,64 +163,29 @@ public class Bingo {
     }
     
     /**
-     * Function allow user to play the game
-     * Store all user's inputs in an ArrayList and 
-     * Use a multidimentional Array List to check the values inside if they're correct answers 
-     * Adjust the positions of the matrix based on user's inputs
-     * @param scnr,card,isRand: Scanner to get user's input, card from BingoCard
-     * @return void
+     * This method allows the user to play the Bingo game manually.
+     * It stores all user inputs in an ArrayList and uses a multidimensional ArrayList 
+     * to check if the inputs are correct answers.
+     * It adjusts the positions of the matrix based on the user's inputs.
+     * User doesn't need to call the number to win the game, they only need to put the right location to win
+     * THIS FUNCTION IS MORE FOR TESTING
+     * @param card the BingoCard object to be used in the game
+     * @param cardID the ID of the card to be used in the game
+     * @return true if the user wins, false if the user loses
      */
-    private static void playGame(Scanner scnr, BingoCard card, boolean isRand, BingoCaller callObject) {
+    public static boolean manualGameplay(BingoCard card, int cardID) {
+        Scanner scnrMan = new Scanner(System.in);
         ArrayList<Integer> storeAllInputs = new ArrayList<>();
-        //Assign checkAllInputs with the results 
         ArrayList<ArrayList<Integer>> checkAllInputs = getBingoResutls(card);
-        card.display();
-        String usrInput;
-        String tempAntiCheatString = callObject.generateCall();
-        int antiCheatValue = Integer.parseInt(tempAntiCheatString.substring(1, 3));
-        System.out.println("TEST" + antiCheatValue);
-        while(true) {
-                try {
-                    System.out.println("---> Caller says: " + tempAntiCheatString);
-                    System.out.println("1. Make a \"BINGO\" call\n" + 
-                            "2. Type \"NONE\" to move to the next call\n"+
-                            "3. Move to the next card by typing \\\"NOTWINABLE\\\"");
-                    System.out.println("Enter a string winthin (B,I,N,G,O):");
-                    System.out.println("Your input should be something like: BB,IB,BO...");
-                    usrInput = scnr.nextLine().trim();
 
-                    if(!usrInput.matches("[a-zA-Z]+")) {
-                        throw new IllegalArgumentException("Invalid input please try again!");
-                    };
-                    break;
-                }
-                catch (IllegalArgumentException e) {
-                    System.out.println(e.getMessage());
-                }
-        }
-        
-        //Break when user calls "BINGO"
-        while(!usrInput.equals("BINGO") && !usrInput.equals("NOTWINABLE")) {
-            if (usrInput.equals("NONE")) {
-                tempAntiCheatString = callObject.generateCall();
-                System.out.println("---> Caller says again: " + tempAntiCheatString);
-                antiCheatValue = Integer.parseInt(tempAntiCheatString.substring(1));
-                System.out.println("HELLO" + antiCheatValue);
-                card.display();
-                System.out.println("Enter user's input: ");
-                usrInput = scnr.nextLine();
-                continue;
-            }; 
-            //Move to another card when user believes they can't win by using their provided card
-            //Also delete the provided card in the array list so they can't pick it again
-            if (usrInput.equals("NOTWINABLE")) {
-                System.out.println("----Move to another random card----");
-                continue;
-            }; 
-            char firstLetter=usrInput.toUpperCase().charAt(0);
-            //System.out.println(firstLetter);
-            char secondLetter=usrInput.toUpperCase().charAt(1);
-            int row =-1,col = -1;
+        card.display();
+        System.out.println("Enter user's input: ");
+        String usrInput = scnrMan.nextLine();
+        while(!usrInput.equals("BINGO")) {
+            char firstLetter=usrInput.charAt(0);
+            System.out.println(firstLetter);
+            char secondLetter=usrInput.charAt(1);
+            int row =0 ,col = 0;
             switch(firstLetter){
                 case 'B':
                     row = 0;
@@ -195,7 +203,7 @@ public class Bingo {
                     row = 4;
                     break;
                 default:
-                    System.out.println("Please choose again among (B,I,N,G,O)!");
+                    System.out.println("haha");
                     break;
             }
 
@@ -216,16 +224,152 @@ public class Bingo {
                     col = 4;
                     break;
                 default:
-                    System.out.println("Please choose again among (B,I,N,G,O)!");
+                    System.out.println("haha");
                     break;
             }
-            //Check if default value was not changed
-            if(row < 0 || col < 0) {
-                card.display();
-                System.out.println("Enter user's input: ");
-                usrInput = scnr.nextLine();
-                continue;
+            if(card.getValue(row, col).equals("XX")) {
+                System.out.println("You already chose this location");
             }
+            else {
+                storeAllInputs.add(Integer.parseInt(card.getValue(row, col)));
+                card.addValue(row, col, "XX");
+            }
+            card.display();
+            System.out.println("Enter user's input: ");
+            usrInput = scnrMan.nextLine();
+            
+        }
+        boolean flag = false;
+        for (int i = 0; i<checkAllInputs.size();i ++) {
+            
+            if(isSubset(checkAllInputs.get(i), storeAllInputs)) {
+                flag=true;
+                System.out.println(flag);
+            }
+        }
+        if(flag==false) {
+            System.out.println("You lose!");
+            scnrMan.close();
+            return true;
+        }
+        else {
+            System.out.println("You won!");
+            scnrMan.close();
+            return true;
+        }
+        
+    }
+
+    /**
+     * This method allows the user to play the Bingo game. It stores all user inputs in an ArrayList and
+     * uses a multidimensional ArrayList to check if the inputs are correct answers.
+     * It adjusts the positions of the matrix based on the user's inputs.
+     * @param card the BingoCard object to be used in the game
+     * @param isRand a boolean indicating whether the gameplay is random
+     * @param callObject a BingoCaller object to generate calls during the game
+     * @return true if the user wins, false if the user moves to the next card
+     */
+    private static boolean randomGameplay(BingoCard card, boolean isRand, BingoCaller callObject) {
+        Scanner scnr = new Scanner(System.in);
+        ArrayList<Integer> storeAllInputs = new ArrayList<>();
+        //Assign checkAllInputs with the results 
+        ArrayList<ArrayList<Integer>> checkAllInputs = getBingoResutls(card);
+        card.display();
+        String usrInput="";
+        String tempAntiCheatString = callObject.generateCall();
+        int antiCheatValue = Integer.parseInt(tempAntiCheatString.substring(1));
+        boolean flagForInput = false;
+        //System.out.println("TEST" + antiCheatValue);
+        while(!flagForInput) {
+            try {
+                System.out.println("---> Caller says: " + tempAntiCheatString);
+                System.out.println("1. Make a \"BINGO\" call\n" + 
+                        "2. Type \"CALL\" to move to the next call\n"+
+                        "3. Move to the next card by typing \"MOVE\"");
+                System.out.println("Enter a string winthin (B,I,N,G,O):");
+                System.out.println("Your input should be something like: BB,IB,BO...");
+                usrInput = scnr.nextLine().trim();
+                
+                if(!usrInput.matches("[a-zA-Z]+")) {
+                    System.out.println("DEMO" + usrInput);
+                    throw new IllegalArgumentException("Invalid input please try again!");
+                }
+                flagForInput = true;
+            }
+            catch (IllegalArgumentException e) {
+                System.out.println(e.getMessage());
+            }
+        }
+
+        String tempUsrInput = usrInput;
+        //Break when user calls "BINGO"
+        while(!tempUsrInput.toUpperCase().equals("BINGO")) {
+            //Move to another card when user believes they can't win by using their provided card
+            if (tempUsrInput.toUpperCase().equals("MOVE")) {
+                usrInput="";
+                System.out.println("||---------------------------||");
+                System.out.println("||Move to another random card||");
+                System.out.println("||---------------------------||");
+                return false;
+            }; 
+
+            if (tempUsrInput.toUpperCase().equals("CALL")) {
+                tempAntiCheatString = callObject.generateCall();
+                System.out.println("---> Caller says again (CALL): " + tempAntiCheatString);
+                antiCheatValue = Integer.parseInt(tempAntiCheatString.substring(1));
+                //System.out.println("HELLO" + antiCheatValue);
+                card.display();
+                System.out.println("Enter user's input (BINGO,CALL,MOVE, or specific location): ");
+                tempUsrInput = scnr.nextLine().trim();
+                continue;
+            }; 
+            
+            char firstLetter=tempUsrInput.toUpperCase().charAt(0);
+            //System.out.println(firstLetter);
+            char secondLetter=tempUsrInput.toUpperCase().charAt(1);
+            int row =-1,col = -1;
+            switch(firstLetter){
+                case 'B':
+                    row = 0;
+                    break;
+                case 'I':
+                    row = 1;
+                    break;
+                case 'N':
+                    row = 2;
+                    break;
+                case 'G':
+                    row = 3;
+                    break;
+                case 'O':
+                    row = 4;
+                    break;
+                default:
+                    System.out.println("Please choose again for the first letter among (B,I,N,G,O)!");
+                    break;
+            }
+
+            switch(secondLetter){
+                case 'B':
+                    col = 0;
+                    break;
+                case 'I':
+                    col = 1;
+                    break;
+                case 'N':
+                    col = 2;
+                    break;
+                case 'G':
+                    col = 3;
+                    break;
+                case 'O':
+                    col = 4;
+                    break;
+                default:
+                    System.out.println("Please choose again for the second letter among (B,I,N,G,O)!");
+                    break;
+            }
+        
             if(card.getValue(row, col).equals("XX")) {
                 System.out.println("You already chose this location");
             }
@@ -233,13 +377,12 @@ public class Bingo {
                 int convertToIntVal = Integer.parseInt(card.getValue(row, col));
                 if(convertToIntVal != antiCheatValue) {
                     card.display();
-                    System.out.println("Value doesn't match current call: " + tempAntiCheatString + "! Now please enter again: ");
-                    usrInput = scnr.nextLine();
+                    System.out.println("Value doesn't match current call: " + tempAntiCheatString + "! You can \"CALL\" again or \"MOVE\": ");
+                    tempUsrInput = scnr.nextLine();
                     continue;
                 }
                 storeAllInputs.add(convertToIntVal);
                 card.addValue(row, col, "XX");
-                
             }
             //Call here again
             tempAntiCheatString = callObject.generateCall();
@@ -247,8 +390,7 @@ public class Bingo {
             antiCheatValue = Integer.parseInt(tempAntiCheatString.substring(1));
             card.display();
             System.out.println("Enter user's input: ");
-            usrInput = scnr.nextLine();
-            
+            tempUsrInput = scnr.nextLine();
         }
         /*A flag to check if all the inputs stored in the storeAllInputs lists 
         are the subset of the checkAllInputs*/
@@ -261,11 +403,13 @@ public class Bingo {
         }
         if(flag==false) {
             System.out.println("You lose!");
-            //Move to the next card
-            //randomPlay(scnr);
+            scnr.close();
+            return true;
         }
         else {
             System.out.println("You won!");
+            scnr.close();
+            return true;
         }
     }
 
