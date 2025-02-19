@@ -38,6 +38,11 @@ public class Bingo {
                     System.out.println("Enjoy the manual mode!");
                     manualPlay(scnr);
                 }
+                //For testing purpose
+                if (choice == 0) {
+                    System.out.println("Exiting the program...");
+                    break;
+                }
             }
             catch (Exception e) {
                 System.out.println("Invalid input, Please enter a number(1 or 2):");
@@ -171,15 +176,17 @@ public class Bingo {
      * THIS FUNCTION IS MORE FOR TESTING
      * @param card the BingoCard object to be used in the game
      * @param cardID the ID of the card to be used in the game
-     * @return true if the user wins, false if the user loses
      */
-    public static boolean manualGameplay(BingoCard card, int cardID) {
+    public static void manualGameplay(BingoCard card, int cardID) {
         Scanner scnrMan = new Scanner(System.in);
         ArrayList<Integer> storeAllInputs = new ArrayList<>();
         ArrayList<ArrayList<Integer>> checkAllInputs = getBingoResutls(card);
 
         card.display();
-        System.out.println("Enter user's input: ");
+        System.out.println("Enter a string winthin (B,I,N,G,O):");
+                System.out.println("Your input should be something like: BB,IB,BO... ");
+        System.out.println(">>Program stricly follow formatting rules: row then column for your input! For example: BI\n" 
+                        + "with B will be the row and I will be the column<<");
         String usrInput = scnrMan.nextLine();
         while(!usrInput.equals("BINGO")) {
             char firstLetter=usrInput.charAt(0);
@@ -203,7 +210,7 @@ public class Bingo {
                     row = 4;
                     break;
                 default:
-                    System.out.println("haha");
+                    System.out.println("Please choose again for the first letter among (B,I,N,G,O)!");
                     break;
             }
 
@@ -224,7 +231,7 @@ public class Bingo {
                     col = 4;
                     break;
                 default:
-                    System.out.println("haha");
+                    System.out.println("Please choose again for the first letter among (B,I,N,G,O)!");
                     break;
             }
             if(card.getValue(row, col).equals("XX")) {
@@ -249,13 +256,9 @@ public class Bingo {
         }
         if(flag==false) {
             System.out.println("You lose!");
-            scnrMan.close();
-            return true;
         }
         else {
             System.out.println("You won!");
-            scnrMan.close();
-            return true;
         }
         
     }
@@ -287,7 +290,9 @@ public class Bingo {
                         "2. Type \"CALL\" to move to the next call\n"+
                         "3. Move to the next card by typing \"MOVE\"");
                 System.out.println("Enter a string winthin (B,I,N,G,O):");
-                System.out.println("Your input should be something like: BB,IB,BO...");
+                System.out.println("Your input should be something like: BB,IB,BO... ");
+                System.out.println(">>Program stricly follow formatting rules: row then column for your input! For example: BI\n" 
+                        + "with B will be the row and I will be the column<<");
                 usrInput = scnr.nextLine().trim();
                 
                 if(!usrInput.matches("[a-zA-Z]+")) {
@@ -403,12 +408,10 @@ public class Bingo {
         }
         if(flag==false) {
             System.out.println("You lose!");
-            scnr.close();
             return true;
         }
         else {
             System.out.println("You won!");
-            scnr.close();
             return true;
         }
     }
