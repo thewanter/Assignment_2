@@ -25,4 +25,27 @@ public class Pattern {
         this.type = "CUSTOM";
         this.pattern = pattern;
     }
+
+    /**
+     * Checks if the provided BingoCard matches the specified pattern.
+     * The method determines the type of pattern and calls the appropriate
+     * checking method.
+     * @param card The BingoCard to check against the pattern.
+     * @return correct functionality of the pattern
+     * @throws IllegalArgumentException if the pattern type is invalid.
+     */
+    public boolean matches(BingoCard card) {
+        switch (type) {
+            case "ROW":
+               // return checkRows(card);
+            case "COLUMN":
+                // return checkColumns(card);
+            case "DIAGONAL":
+                // return checkDiagonals(card);
+            case "CUSTOM":
+                // return checkCustom(card);
+            default:
+                throw new IllegalArgumentException("Invalid pattern type: " + type);
+
+        }
 }
