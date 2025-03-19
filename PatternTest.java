@@ -36,7 +36,7 @@ public class PatternTest {
         BingoCard card = new BingoCard("1");
         card.display();
         for (int j = 0; j < 5; j++) {
-            card.addValue(2, j, "XX"); // Fill the first row with "XX"
+            card.addValue(2, j, "XX");
         }
         Pattern pattern = new Pattern("ROW");
         assertTrue(pattern.matches(card), "Pattern should match the filled row (P2)");
@@ -51,16 +51,27 @@ public class PatternTest {
         BingoCard card = new BingoCard("1");
         card.display();
         for (int j = 0; j < 5; j++) {
-            card.addValue(4, j, "XX"); // Fill the first row with "XX"
+            card.addValue(4, j, "XX");
         }
         Pattern pattern = new Pattern("ROW");
         assertTrue(pattern.matches(card), "Pattern should match the filled row (P3)");
     }
 
     /**
-     * Test the matches method for a BingoCard with a filled column.
-     * This test checks if the pattern correctly identifies a complete column in the
+     * P4: 1st row fully marked except the last column
+     * Test the matches method for a BingoCard with a filled row.
      */
+    @Test
+    public void testP4() {
+        BingoCard card = new BingoCard("1");
+        card.display();
+        for (int j = 0; j < 4; j++) {
+            card.addValue(0, j, "XX");
+        }
+        Pattern pattern = new Pattern("ROW");
+        assertFalse(pattern.matches(card), "Pattern should match the filled row (P4)");
+    }
+
     @Test
     public void testCheckColumns() {
         BingoCard card = new BingoCard("1");
