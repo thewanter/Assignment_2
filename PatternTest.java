@@ -24,24 +24,37 @@ public class PatternTest {
             card.addValue(0, j, "XX"); // Fill the first row with "XX"
         }
         Pattern pattern = new Pattern("ROW");
-        assertTrue(pattern.matches(card), "Pattern should match the filled row");
+        assertTrue(pattern.matches(card), "Pattern should match the filled row (P1)");
     }
 
     /**
      * P2: 3rd row fully marked
      * Test the matches method for a BingoCard with a filled row.
-     * This test checks if the pattern correctly identifies a complete row in the
-     * BingoCard.
      */
     @Test
     public void testP2() {
         BingoCard card = new BingoCard("1");
         card.display();
         for (int j = 0; j < 5; j++) {
-            card.addValue(0, j, "XX"); // Fill the first row with "XX"
+            card.addValue(2, j, "XX"); // Fill the first row with "XX"
         }
         Pattern pattern = new Pattern("ROW");
-        assertTrue(pattern.matches(card), "Pattern should match the filled row");
+        assertTrue(pattern.matches(card), "Pattern should match the filled row (P2)");
+    }
+
+    /**
+     * P3: Last row fully marked
+     * Test the matches method for a BingoCard with a filled row.
+     */
+    @Test
+    public void testP3() {
+        BingoCard card = new BingoCard("1");
+        card.display();
+        for (int j = 0; j < 5; j++) {
+            card.addValue(4, j, "XX"); // Fill the first row with "XX"
+        }
+        Pattern pattern = new Pattern("ROW");
+        assertTrue(pattern.matches(card), "Pattern should match the filled row (P3)");
     }
 
     /**
