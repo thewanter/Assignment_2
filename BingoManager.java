@@ -17,4 +17,22 @@ public class BingoManager {
     public void addPattern(Pattern pattern) {
         patterns.add(pattern);
     }
+
+    /**
+     * Counts the number of bingos in a given BingoCard based on the patterns
+     * managed by this BingoManager.
+     * 
+     * @param card The BingoCard to check for bingos.
+     * @return The number of bingos found in the card.
+     */
+    public int countBingos(BingoCard card) {
+        int count = 0;
+        for (Pattern pattern : patterns) {
+            if (pattern.matches(card)) {
+                count++;
+            }
+        }
+        return count;
+
+    }
 }
