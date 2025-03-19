@@ -11,12 +11,30 @@ public class PatternTest {
     }
 
     /**
+     * P1: 1st row fully marked
      * Test the matches method for a BingoCard with a filled row.
      * This test checks if the pattern correctly identifies a complete row in the
      * BingoCard.
      */
     @Test
-    public void testCheckRows() {
+    public void testP1() {
+        BingoCard card = new BingoCard("1");
+        card.display();
+        for (int j = 0; j < 5; j++) {
+            card.addValue(0, j, "XX"); // Fill the first row with "XX"
+        }
+        Pattern pattern = new Pattern("ROW");
+        assertTrue(pattern.matches(card), "Pattern should match the filled row");
+    }
+
+    /**
+     * P2: 3rd row fully marked
+     * Test the matches method for a BingoCard with a filled row.
+     * This test checks if the pattern correctly identifies a complete row in the
+     * BingoCard.
+     */
+    @Test
+    public void testP2() {
         BingoCard card = new BingoCard("1");
         card.display();
         for (int j = 0; j < 5; j++) {
