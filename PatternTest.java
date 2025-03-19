@@ -88,6 +88,21 @@ public class PatternTest {
     }
 
     /**
+     * P6: 4rd column fully marked
+     * Test the matches method for a BingoCard with a filled column.
+     */
+    @Test
+    public void testP6() {
+        BingoCard card = new BingoCard("1");
+        card.display();
+        for (int i = 0; i < 5; i++) {
+            card.addValue(3, 0, "XX");
+        }
+        Pattern pattern = new Pattern("COLUMN");
+        assertTrue(pattern.matches(card), "Pattern should match the filled column (P6)");
+    }
+
+    /**
      * Test the matches method for a BingoCard with a filled diagonal.
      * This test checks if the pattern correctly identifies a complete diagonal in
      * the
