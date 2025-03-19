@@ -29,7 +29,7 @@ public class PatternTest {
      * This test checks if the pattern correctly identifies a complete column in the
      */
     @Test
-    public void testColumnPattern() {
+    public void testCheckColumns() {
         BingoCard card = new BingoCard("1");
         card.display();
         for (int i = 0; i < 5; i++) {
@@ -37,6 +37,22 @@ public class PatternTest {
         }
         Pattern pattern = new Pattern("COLUMN");
         assertTrue(pattern.matches(card), "Pattern should match the filled column");
+    }
+
+    /**
+     * Test the matches method for a BingoCard with a filled diagonal.
+     * This test checks if the pattern correctly identifies a complete diagonal in
+     * the
+     */
+    @Test
+    public void testCheckDiagonals() {
+        BingoCard card = new BingoCard("1");
+        card.display();
+        for (int i = 0; i < 5; i++) {
+            card.addValue(i, i, "XX"); // Fill the diagonal from top-left to bottom-right
+        }
+        Pattern pattern = new Pattern("DIAGONAL");
+        assertTrue(pattern.matches(card), "Pattern should match the filled diagonal");
     }
 
 }
