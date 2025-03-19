@@ -30,6 +30,7 @@ public class Pattern {
      * Checks if the provided BingoCard matches the specified pattern.
      * The method determines the type of pattern and calls the appropriate
      * checking method.
+     * 
      * @param card The BingoCard to check against the pattern.
      * @return correct functionality of the pattern
      * @throws IllegalArgumentException if the pattern type is invalid.
@@ -37,7 +38,7 @@ public class Pattern {
     public boolean matches(BingoCard card) {
         switch (type) {
             case "ROW":
-               // return checkRows(card);
+                // return checkRows(card);
             case "COLUMN":
                 // return checkColumns(card);
             case "DIAGONAL":
@@ -46,8 +47,8 @@ public class Pattern {
                 // return checkCustom(card);
             default:
                 throw new IllegalArgumentException("Invalid pattern type: " + type);
-
         }
+    }
 
     /**
      * Checks if any row in the provided BingoCard matches the pattern.
@@ -118,5 +119,22 @@ public class Pattern {
         }
 
         return leftDiagonalComplete || rightDiagonalComplete;
+    }
+
+    /**
+     * Checks if the provided BingoCard matches a custom pattern.
+     * 
+     * @param card The BingoCard to check against the custom pattern.
+     * @return true if the BingoCard matches the custom pattern, false otherwise.
+     */
+    private boolean checkCustom(BingoCard card) {
+        for (int[] coords : pattern) {
+            int row = coords[0];
+            int col = coords[1];
+            if (!card.getValue(row, col).equals("XX")) {
+                return false; // Found a non-matching cell in the custom pattern
+            }
+        }
+        return true; // All cells in the custom pattern match
     }
 }
