@@ -38,13 +38,13 @@ public class Pattern {
     public boolean matches(BingoCard card) {
         switch (type) {
             case "ROW":
-                // return checkRows(card);
+                return checkRows(card);
             case "COLUMN":
-                // return checkColumns(card);
+                return checkColumns(card);
             case "DIAGONAL":
-                // return checkDiagonals(card);
+                return checkDiagonals(card);
             case "CUSTOM":
-                // return checkCustom(card);
+                return checkCustom(card);
             default:
                 throw new IllegalArgumentException("Invalid pattern type: " + type);
         }
@@ -104,7 +104,7 @@ public class Pattern {
      * @return leftDiagonalComplete or rightDiagonalComplete
      *         if any diagonal matches the pattern, false otherwise.
      */
-    private boolean checkDiagonal(BingoCard card) {
+    private boolean checkDiagonals(BingoCard card) {
         // Implement logic to check if any diagonal in the BingoCard matches the pattern
         boolean leftDiagonalComplete = true;
         boolean rightDiagonalComplete = true;
