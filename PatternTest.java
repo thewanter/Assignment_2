@@ -96,7 +96,7 @@ public class PatternTest {
         BingoCard card = new BingoCard("1");
         card.display();
         for (int i = 0; i < 5; i++) {
-            card.addValue(3, 0, "XX");
+            card.addValue(i, 3, "XX");
         }
         Pattern pattern = new Pattern("COLUMN");
         assertTrue(pattern.matches(card), "Pattern should match the filled column (P6)");
@@ -111,10 +111,44 @@ public class PatternTest {
         BingoCard card = new BingoCard("1");
         card.display();
         for (int i = 0; i < 5; i++) {
-            card.addValue(4, 0, "XX");
+            card.addValue(i, 4, "XX");
         }
         Pattern pattern = new Pattern("COLUMN");
         assertTrue(pattern.matches(card), "Pattern should match the filled column (P7)");
+    }
+
+    /**
+     * P8: 1st row fully marked with "COLUMN" pattern
+     * Test the matches method for a BingoCard with a filled row using a column
+     * pattern.
+     */
+    @Test
+    public void testP8() {
+        BingoCard card = new BingoCard("1");
+        card.display();
+        for (int i = 0; i < 5; i++) {
+            card.addValue(0, i, "XX"); // Fill the first row with "XX"
+        }
+        Pattern pattern = new Pattern("COLUMN");
+        assertFalse(pattern.matches(card), "Pattern should match the filled column (P8)");
+    }
+
+    /**
+     * P9: 2nd column fully marked except 2nd row
+     * Test the matches method for a BingoCard with a filled column except for one
+     * row. This test checks if the pattern correctly identifies a column that is
+     * not
+     */
+    public void testP9() {
+        BingoCard card = new BingoCard("1");
+        card.display();
+        for (int i = 0; i < 5; i++) {
+            if (i == 1)
+                continue; // Skip the 2nd row
+            card.addValue(i, 1, "XX");
+        }
+        Pattern pattern = new Pattern("COLUMN");
+        assertFalse(pattern.matches(card), "Pattern should match the filled column (P7)");
     }
 
     /**
