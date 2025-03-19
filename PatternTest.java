@@ -1,5 +1,7 @@
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.util.Arrays;
+
 import org.junit.jupiter.api.Test;
 
 public class PatternTest {
@@ -53,6 +55,21 @@ public class PatternTest {
         }
         Pattern pattern = new Pattern("DIAGONAL");
         assertTrue(pattern.matches(card), "Pattern should match the filled diagonal");
+    }
+
+    /**
+     * Test the matches method for a BingoCard with a custom pattern.
+     * This test checks if the pattern correctly identifies a custom pattern in the
+     */
+    @Test
+    public void testCheckCustom() {
+        BingoCard card = new BingoCard("TestCard");
+        int[][] patterns = { { 0, 0 }, { 0, 1 }, { 0, 2 }, { 1, 2 }, { 2, 2 } };
+        for (int[] pattern : patterns) {
+            card.addValue(pattern[0], pattern[1], "XX");
+        }
+        Pattern customPattern = new Pattern(Arrays.asList(patterns));
+        assertTrue(customPattern.matches(card));
     }
 
 }
