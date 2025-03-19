@@ -49,6 +49,12 @@ public class Pattern {
 
         }
 
+    /**
+     * Checks if any row in the provided BingoCard matches the pattern.
+     * 
+     * @param card The BingoCard to check against the pattern.
+     * @return true if any row matches the pattern, false otherwise.
+     */
     private boolean checkRows(BingoCard card) {
         // Implement logic to check if any row in the BingoCard matches the pattern
         for (int i = 0; i < 5; i++) {
@@ -64,6 +70,30 @@ public class Pattern {
             }
         }
 
-        return false; // Placeholder
+        return false;
     }
+
+    /**
+     * Checks if any column in the provided BingoCard matches the pattern.
+     * 
+     * @param card The BingoCard to check against the pattern.
+     * @return true if any column matches the pattern, false otherwise.
+     */
+    private boolean checkColumns(BingoCard card) {
+        // Implement logic to check if any column in the BingoCard matches the pattern
+        for (int j = 0; j < 5; j++) {
+            boolean columnComplete = true;
+            for (int i = 0; i < 5; i++) {
+                if (!card.getValue(i, j).equals("XX")) {
+                    columnComplete = false;
+                    break;
+                }
+            }
+            if (columnComplete) {
+                return true; // Found a complete column
+            }
+        }
+        return false;
+    }
+
 }
