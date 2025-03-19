@@ -48,4 +48,22 @@ public class Pattern {
                 throw new IllegalArgumentException("Invalid pattern type: " + type);
 
         }
+
+    private boolean checkRows(BingoCard card) {
+        // Implement logic to check if any row in the BingoCard matches the pattern
+        for (int i = 0; i < 5; i++) {
+            boolean rowComplete = true;
+            for (int j = 0; j < 5; j++) {
+                if (!card.getValue(i, j).equals("XX")) {
+                    rowComplete = false;
+                    break;
+                }
+            }
+            if (rowComplete) {
+                return true; // Found a complete row
+            }
+        }
+
+        return false; // Placeholder
+    }
 }
