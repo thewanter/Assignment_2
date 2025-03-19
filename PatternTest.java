@@ -148,23 +148,24 @@ public class PatternTest {
             card.addValue(i, 1, "XX");
         }
         Pattern pattern = new Pattern("COLUMN");
-        assertFalse(pattern.matches(card), "Pattern should match the filled column (P7)");
+        assertFalse(pattern.matches(card), "Pattern should match the filled column (P9)");
     }
 
     /**
-     * Test the matches method for a BingoCard with a filled diagonal.
-     * This test checks if the pattern correctly identifies a complete diagonal in
-     * the
+     * P10: Top-right to Bottom-left fully marked
+     * Test the matches method for a BingoCard with a filled diagonal (top-left).
      */
     @Test
-    public void testCheckDiagonals() {
+    public void testP10() {
         BingoCard card = new BingoCard("1");
         card.display();
-        for (int i = 0; i < 5; i++) {
-            card.addValue(i, i, "XX"); // Fill the diagonal from top-left to bottom-right
+        for (int i = 4; i >= 0; i--) {
+            for (int j = 0; j < 5; j++) {
+                card.addValue(j, i, "XX"); // Fill the diagonal from top-left to bottom-right
+            }
         }
         Pattern pattern = new Pattern("DIAGONAL");
-        assertTrue(pattern.matches(card), "Pattern should match the filled diagonal");
+        assertTrue(pattern.matches(card), "Pattern should match the filled diagonal (P10)");
     }
 
     /**
