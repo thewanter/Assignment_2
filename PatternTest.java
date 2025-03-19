@@ -197,6 +197,41 @@ public class PatternTest {
     }
 
     /**
+     * P13: Top row and middle column fully marked with "CUSTOME" pattern
+     * Test the matches method for a BingoCard with a filled row using a diagonal
+     * pattern.
+     */
+    public void testP13() {
+        BingoCard card = new BingoCard("1");
+        card.display();
+        for (int i = 0; i < 5; i++) {
+            card.addValue(0, i, "XX");
+        }
+
+        for (int j = 0; j < 5; j++) {
+            card.addValue(j, 2, "XX");
+        }
+        Pattern pattern = new Pattern("CUSTOM");
+        assertTrue(pattern.matches(card), "Pattern should match the filled custom (P13)");
+    }
+
+    /**
+     * P14: Entire card fully marked
+     * 
+     */
+    public void testP14() {
+        BingoCard card = new BingoCard("1");
+        card.display();
+        for (int i = 0; i < 5; i++) {
+            for (int j = 0; j < 5; j++) {
+                card.addValue(i, j, "XX");
+            }
+        }
+        Pattern pattern = new Pattern("CUSTOM");
+        assertTrue(pattern.matches(card), "Pattern should match the filled custom (P13)");
+    }
+
+    /**
      * Test the matches method for a BingoCard with a custom pattern.
      * This test checks if the pattern correctly identifies a custom pattern in the
      */
