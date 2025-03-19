@@ -14,13 +14,29 @@ public class PatternTest {
      * BingoCard.
      */
     @Test
-    void testCheckRows() {
-        BingoCard card = new BingoCard("TestCard");
+    public void testCheckRows() {
+        BingoCard card = new BingoCard("1");
+        card.display();
         for (int j = 0; j < 5; j++) {
             card.addValue(0, j, "XX"); // Fill the first row with "XX"
         }
         Pattern pattern = new Pattern("ROW");
         assertTrue(pattern.matches(card), "Pattern should match the filled row");
-
     }
+
+    /**
+     * Test the matches method for a BingoCard with a filled column.
+     * This test checks if the pattern correctly identifies a complete column in the
+     */
+    @Test
+    public void testColumnPattern() {
+        BingoCard card = new BingoCard("1");
+        card.display();
+        for (int i = 0; i < 5; i++) {
+            card.addValue(i, 0, "XX"); // Fill the first column with "XX"
+        }
+        Pattern pattern = new Pattern("COLUMN");
+        assertTrue(pattern.matches(card), "Pattern should match the filled column");
+    }
+
 }
