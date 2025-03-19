@@ -96,4 +96,27 @@ public class Pattern {
         return false;
     }
 
+    /**
+     * Checks if any diagonal in the provided BingoCard matches the pattern.
+     * 
+     * @param card The BingoCard to check against the pattern.
+     * @return leftDiagonalComplete or rightDiagonalComplete
+     *         if any diagonal matches the pattern, false otherwise.
+     */
+    private boolean checkDiagonal(BingoCard card) {
+        // Implement logic to check if any diagonal in the BingoCard matches the pattern
+        boolean leftDiagonalComplete = true;
+        boolean rightDiagonalComplete = true;
+
+        for (int i = 0; i < 5; i++) {
+            if (!card.getValue(i, i).equals("XX")) {
+                leftDiagonalComplete = false;
+            }
+            if (!card.getValue(i, 4 - i).equals("XX")) {
+                rightDiagonalComplete = false;
+            }
+        }
+
+        return leftDiagonalComplete || rightDiagonalComplete;
+    }
 }
