@@ -72,15 +72,19 @@ public class PatternTest {
         assertFalse(pattern.matches(card), "Pattern should match the filled row (P4)");
     }
 
+    /**
+     * P5: 1st column fully marked
+     * Test the matches method for a BingoCard with a filled column.
+     */
     @Test
-    public void testCheckColumns() {
+    public void testP5() {
         BingoCard card = new BingoCard("1");
         card.display();
         for (int i = 0; i < 5; i++) {
-            card.addValue(i, 0, "XX"); // Fill the first column with "XX"
+            card.addValue(i, 0, "XX");
         }
         Pattern pattern = new Pattern("COLUMN");
-        assertTrue(pattern.matches(card), "Pattern should match the filled column");
+        assertTrue(pattern.matches(card), "Pattern should match the filled column (P5)");
     }
 
     /**
