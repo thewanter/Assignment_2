@@ -2,12 +2,29 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.Arrays;
 
+import org.junit.Before;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 public class PatternTest {
-    @Test
-    void testMatches() {
 
+    BingoCard card = new BingoCard("1");
+
+    /**
+     * This method is called before each test to set up the BingoCard with initial
+     * values. This ensures that each test starts with a fresh BingoCard
+     * containing a 5x5 grid filled with numbers from 0 to 24.
+     */
+    @BeforeEach
+    public void setUp() {
+        int num = 0;
+        for (int i = 0; i < 5; i++) {
+            for (int j = 0; j < 5; j++) {
+                card.addValue(i, j, "" + num);
+                num++;
+            }
+        }
     }
 
     /**
@@ -18,11 +35,12 @@ public class PatternTest {
      */
     @Test
     public void testP1() {
-        BingoCard card = new BingoCard("1");
-        card.display();
+        BingoCard card = this.card;
+
         for (int j = 0; j < 5; j++) {
             card.addValue(0, j, "XX"); // Fill the first row with "XX"
         }
+
         Pattern pattern = new Pattern("ROW");
         assertTrue(pattern.matches(card), "Pattern should match the filled row (P1)");
     }
@@ -33,8 +51,6 @@ public class PatternTest {
      */
     @Test
     public void testP2() {
-        BingoCard card = new BingoCard("1");
-        card.display();
         for (int j = 0; j < 5; j++) {
             card.addValue(2, j, "XX");
         }
@@ -48,7 +64,6 @@ public class PatternTest {
      */
     @Test
     public void testP3() {
-        BingoCard card = new BingoCard("1");
         card.display();
         for (int j = 0; j < 5; j++) {
             card.addValue(4, j, "XX");
@@ -63,7 +78,6 @@ public class PatternTest {
      */
     @Test
     public void testP4() {
-        BingoCard card = new BingoCard("1");
         card.display();
         for (int j = 0; j < 4; j++) {
             card.addValue(0, j, "XX");
@@ -78,7 +92,6 @@ public class PatternTest {
      */
     @Test
     public void testP5() {
-        BingoCard card = new BingoCard("1");
         card.display();
         for (int i = 0; i < 5; i++) {
             card.addValue(i, 0, "XX");
@@ -93,7 +106,6 @@ public class PatternTest {
      */
     @Test
     public void testP6() {
-        BingoCard card = new BingoCard("1");
         card.display();
         for (int i = 0; i < 5; i++) {
             card.addValue(i, 3, "XX");
@@ -108,7 +120,6 @@ public class PatternTest {
      */
     @Test
     public void testP7() {
-        BingoCard card = new BingoCard("1");
         card.display();
         for (int i = 0; i < 5; i++) {
             card.addValue(i, 4, "XX");
@@ -124,7 +135,6 @@ public class PatternTest {
      */
     @Test
     public void testP8() {
-        BingoCard card = new BingoCard("1");
         card.display();
         for (int i = 0; i < 5; i++) {
             card.addValue(0, i, "XX"); // Fill the first row with "XX"
@@ -140,7 +150,6 @@ public class PatternTest {
      * not
      */
     public void testP9() {
-        BingoCard card = new BingoCard("1");
         card.display();
         for (int i = 0; i < 5; i++) {
             if (i == 1)
@@ -158,7 +167,6 @@ public class PatternTest {
      */
     @Test
     public void testP10() {
-        BingoCard card = new BingoCard("1");
         card.display();
         for (int i = 0; i < 5; i++) {
             card.addValue(i, 4 - i, "XX"); // Fill the diagonal from top-left to bottom-right
@@ -171,8 +179,8 @@ public class PatternTest {
      * P11: Top-left to Bottom-right fully marked
      * Test the matches method for a BingoCard with a filled diagonal.
      */
+    @Test
     public void testP11() {
-        BingoCard card = new BingoCard("1");
         card.display();
         for (int i = 0; i < 5; i++) {
             card.addValue(i, i, "XX"); // Fill the diagonal from top-left to bottom-right
@@ -186,8 +194,8 @@ public class PatternTest {
      * Test the matches method for a BingoCard with a filled row using a diagonal
      * pattern.
      */
+    @Test
     public void testP12() {
-        BingoCard card = new BingoCard("1");
         card.display();
         for (int i = 0; i < 5; i++) {
             card.addValue(1, i, "XX");
@@ -198,11 +206,11 @@ public class PatternTest {
 
     /**
      * P13: Top row and middle column fully marked with "CUSTOME" pattern
-     * Test the matches method for a BingoCard with a filled row using a diagonal
+     * Test the matches method for a BingoCard with a filled row using a custom
      * pattern.
      */
+    @Test
     public void testP13() {
-        BingoCard card = new BingoCard("1");
         card.display();
         for (int i = 0; i < 5; i++) {
             card.addValue(0, i, "XX");
@@ -217,10 +225,11 @@ public class PatternTest {
 
     /**
      * P14: Entire card fully marked
-     * 
+     * Test the matches method for a BingoCard with a filled row and column using a
+     * custom pattern.
      */
+    @Test
     public void testP14() {
-        BingoCard card = new BingoCard("1");
         card.display();
         for (int i = 0; i < 5; i++) {
             for (int j = 0; j < 5; j++) {
@@ -228,22 +237,29 @@ public class PatternTest {
             }
         }
         Pattern pattern = new Pattern("CUSTOM");
-        assertTrue(pattern.matches(card), "Pattern should match the filled custom (P13)");
+        assertTrue(pattern.matches(card), "Pattern should match the filled custom (P14)");
     }
 
     /**
-     * Test the matches method for a BingoCard with a custom pattern.
-     * This test checks if the pattern correctly identifies a custom pattern in the
+     * P15: Top row and middle column fully marked except for the middle space
+     * Test the matches method for a BingoCard with a filled row and column using a
+     * custom pattern.
      */
     @Test
-    public void testCheckCustom() {
-        BingoCard card = new BingoCard("TestCard");
-        int[][] patterns = { { 0, 0 }, { 0, 1 }, { 0, 2 }, { 1, 2 }, { 2, 2 } };
-        for (int[] pattern : patterns) {
-            card.addValue(pattern[0], pattern[1], "XX");
+    public void testP15() {
+        card.display();
+        for (int i = 0; i < 5; i++) {
+            if (i == 2)
+                continue; // Skip the middle row
+            for (int j = 0; j < 5; j++) {
+                card.addValue(i, j, "XX");
+            }
         }
-        Pattern customPattern = new Pattern(Arrays.asList(patterns));
-        assertTrue(customPattern.matches(card));
+        Pattern pattern = new Pattern("CUSTOM");
+        assertFalse(pattern.matches(card), "Pattern should match the filled custom (P15)");
     }
 
+    /**
+     * P16: Top row, bottom row, left column, and right column fully marked
+     */
 }

@@ -122,19 +122,72 @@ public class Pattern {
     }
 
     /**
-     * Checks if the provided BingoCard matches a custom pattern.
+     * Checks if the provided BingoCard has a T custom pattern.
      * 
      * @param card The BingoCard to check against the custom pattern.
      * @return true if the BingoCard matches the custom pattern, false otherwise.
      */
     private boolean checkCustom(BingoCard card) {
-        for (int[] coords : pattern) {
-            int row = coords[0];
-            int col = coords[1];
-            if (!card.getValue(row, col).equals("XX")) {
-                return false; // Found a non-matching cell in the custom pattern
+        boolean topT = true;
+        boolean bottomT = true;
+        for (int i = 0; i < 5; i++) {
+            if (!card.getValue(0, i).equals("XX")) {
+                topT = false;
             }
         }
+        // Check if the entire last row (4,0) to (4,4) is fully marked
+        for (int j = 0; j < 5; j++) {
+            if (!card.getValue(4, j).equals("XX")) {
+                bottomT = false; // Bottom row is not fully marked
+            }
+        }
+        if (!topT && !bottomT) {
+            return false; // Neither top nor bottom row is fully marked
+        }
+        // If either top or bottom row is fully marked, check the middle column
+        if (topT) {
+            boolean columnMarked = isAnyColumnFullyMarked(card);
+            if (!columnMarked) {
+                return false; // Top row is fully marked but middle column is not
+            }
+            return true; // Top row is fully marked
+        }
+        if (bottomT) {
+            boolean columnMarked = isAnyColumnFullyMarked(card);
+            if (!columnMarked) {
+                return false; // Bottom row is fully marked but middle column is not
+            }
+            return true;
+        }
+
         return true; // All cells in the custom pattern match
+    }
+
+    /**
+     * Checks if any column in the provided BingoCard is fully marked with "XX".
+     * 
+     * @param card The BingoCard to check against the pattern.
+     * @return true if any column is fully marked, false otherwise.
+     */
+    private boolean isAnyColumnFullyMarked(BingoCard card) {
+        // Iterate over each column (0 to 4)
+        for (int col = 0; col < 5; col++) {
+            boolean columnMarked = true;
+
+            // Check if all rows in this column are "XX"
+            for (int row = 0; row < 5; row++) {
+                if (!card.getValue(row, col).equals("XX")) {
+                    columnMarked = false; // If any cell is not marked, the column is not fully marked
+                    break;
+                }
+            }
+
+            // If we found a fully marked column, return true
+            if (columnMarked) {
+                return true;
+            }
+        }
+
+        return false; // No fully marked columns found
     }
 }
