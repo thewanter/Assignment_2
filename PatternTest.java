@@ -205,7 +205,7 @@ public class PatternTest {
     }
 
     /**
-     * P13: Top row and middle column fully marked with "CUSTOME" pattern
+     * P13: Top row and middle column fully marked with "CUSTOM" pattern
      * Test the matches method for a BingoCard with a filled row using a custom
      * pattern.
      */
@@ -274,6 +274,24 @@ public class PatternTest {
         }
         Pattern pattern = new Pattern("CUSTOM");
         assertTrue(pattern.matches(card), "Pattern should match the filled custom (P16)");
+    }
+
+    /**
+     * P17: Entire card fully marked except the bottom right corner
+     * 
+     */
+    @Test
+    public void testP17() {
+        card.display();
+        for (int i = 0; i < 5; i++) {
+            for (int j = 0; j < 5; j++) {
+                if (i == 4 && j == 4)
+                    continue; // Skip the bottom right corner
+                card.addValue(i, j, "XX");
+            }
+        }
+        Pattern pattern = new Pattern("CUSTOM");
+        assertFalse(pattern.matches(card), "Pattern should match the filled custom (P17)");
     }
 
 }

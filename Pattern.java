@@ -135,31 +135,23 @@ public class Pattern {
                 topT = false;
             }
         }
-        // Check if the entire last row (4,0) to (4,4) is fully marked
+
         for (int j = 0; j < 5; j++) {
             if (!card.getValue(4, j).equals("XX")) {
                 bottomT = false; // Bottom row is not fully marked
             }
         }
+
         if (!topT && !bottomT) {
             return false; // Neither top nor bottom row is fully marked
         }
-        // If either top or bottom row is fully marked, check the middle column
-        if (topT) {
-            boolean columnMarked = isAnyColumnFullyMarked(card);
-            if (!columnMarked) {
-                return false; // Top row is fully marked but middle column is not
-            }
-            return true; // Top row is fully marked
-        }
-        if (bottomT) {
-            boolean columnMarked = isAnyColumnFullyMarked(card);
-            if (!columnMarked) {
-                return false; // Bottom row is fully marked but middle column is not
-            }
-            return true;
+        // Check if the middle column is fully marked
+        boolean columnMarked = isAnyColumnFullyMarked(card);
+        if (!columnMarked) {
+            return false;
         }
 
+        // Allow the bottom right corner to be unmarked
         return true; // All cells in the custom pattern match
     }
 
@@ -172,7 +164,7 @@ public class Pattern {
     private boolean isAnyColumnFullyMarked(BingoCard card) {
         // Iterate over each column (0 to 4)
         for (int col = 0; col < 5; col++) {
-            boolean columnMarked = true;
+            boolean columnMarked = false;
 
             // Check if all rows in this column are "XX"
             for (int row = 0; row < 5; row++) {
@@ -187,7 +179,6 @@ public class Pattern {
                 return true;
             }
         }
-
         return false; // No fully marked columns found
     }
 }
