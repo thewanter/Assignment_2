@@ -284,7 +284,7 @@ public class Bingo {
         } else {
             System.out.println("You won!");
         }
-
+        scnrMan.close();
     }
 
     /**
@@ -444,6 +444,7 @@ public class Bingo {
             System.out.println("You won!");
             return true;
         }
+
     }
 
     /**

@@ -28,11 +28,21 @@ public class BingoManager {
     public int countBingos(BingoCard card) {
         int count = 0;
         for (Pattern pattern : patterns) {
-            if (pattern.matches(card)) {
-                count++;
+            if (pattern.matches(card) && (pattern.getType().equals("ROW") || pattern.getType().equals("COLUMN"))) {
+                for (int i = 0; i < 5; i++) {
+                    boolean rowComplete = true;
+                    for (int j = 0; j < 5; j++) {
+                        if (!card.getValue(i, j).equals("XX")) {
+                            rowComplete = false;
+                            break;
+                        }
+                    }
+                    if (rowComplete) {
+                        count++;
+                    }
+                }
             }
         }
         return count;
-
     }
 }

@@ -15,6 +15,10 @@ public class Pattern {
         this.type = type.toUpperCase();
     }
 
+    public String getType() {
+        return type;
+    }
+
     /**
      * Constructs a Pattern object with a custom pattern.
      * The type is set to "CUSTOM" and the provided pattern is used.
@@ -164,7 +168,7 @@ public class Pattern {
     private boolean isAnyColumnFullyMarked(BingoCard card) {
         // Iterate over each column (0 to 4)
         for (int col = 0; col < 5; col++) {
-            boolean columnMarked = false;
+            boolean columnMarked = true;
 
             // Check if all rows in this column are "XX"
             for (int row = 0; row < 5; row++) {
