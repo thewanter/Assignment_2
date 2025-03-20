@@ -261,5 +261,19 @@ public class PatternTest {
 
     /**
      * P16: Top row, bottom row, left column, and right column fully marked
+     * 
      */
+    @Test
+    public void testP16() {
+        card.display();
+        for (int i = 0; i < 5; i++) {
+            card.addValue(0, i, "XX"); // Fill the top row
+            card.addValue(4, i, "XX"); // Fill the bottom row
+            card.addValue(i, 0, "XX"); // Fill the left column
+            card.addValue(i, 4, "XX"); // Fill the right column
+        }
+        Pattern pattern = new Pattern("CUSTOM");
+        assertTrue(pattern.matches(card), "Pattern should match the filled custom (P16)");
+    }
+
 }
