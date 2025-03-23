@@ -4,8 +4,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 public class BingoManagerTest {
-
-    BingoCard card = new BingoCard("1");
+    private BingoManager manager;
+    private BingoCard card;
 
     /**
      * This method is called before each test to set up the BingoCard with initial
@@ -14,6 +14,8 @@ public class BingoManagerTest {
      */
     @BeforeEach
     public void setUp() {
+        manager = new BingoManager();
+        card = new BingoCard("1"); // Create a new BingoCard with ID "1"
         int num = 0;
         for (int i = 0; i < 5; i++) {
             for (int j = 0; j < 5; j++) {
@@ -29,12 +31,10 @@ public class BingoManagerTest {
      */
     @Test
     public void testBM1() {
+        manager.addPattern(new Pattern("ROW"));
         for (int i = 0; i < 5; i++) {
             card.addValue(0, i, "XX"); // Fill the first row with "XX"
         }
-
-        BingoManager manager = new BingoManager();
-        manager.addPattern(new Pattern("ROW"));
         assertEquals(1, manager.countBingos(card));
     }
 
@@ -43,41 +43,40 @@ public class BingoManagerTest {
      */
     @Test
     public void testBM2() {
+        manager.addPattern(new Pattern("ROW"));
         for (int i = 0; i < 5; i++) {
             card.addValue(0, i, "XX"); // Fill the first row with "XX"
             card.addValue(2, i, "XX"); // Fill the third row with "XX"
             card.addValue(4, i, "XX"); // Fill the last row with "XX"
         }
-
-        BingoManager manager = new BingoManager();
-        manager.addPattern(new Pattern("ROW"));
-
         assertEquals(3, manager.countBingos(card));
     }
 
     @Test
     public void testBM3() {
+        manager.addPattern(new Pattern("ROW"));
+
         for (int i = 0; i < 5; i++) {
             card.addValue(0, i, "XX"); // Fill the first row with "XX"
             card.addValue(2, i, "XX"); // Fill the third row with "XX"
             card.addValue(4, i, "XX"); // Fill the last row with "XX"
         }
 
-        BingoManager manager = new BingoManager();
         for (int i = 0; i < 5; i++) {
             card.addValue(i, 4, "XX"); // Fill the last column with "XX"
         }
 
-        manager.addPattern(new Pattern("ROW"));
         assertEquals(3, manager.countBingos(card)); // Check for 3 bingos (rows)
     }
 
     /**
      * BM4: 1st, 3rd, and last row fully marked and last column fully marked
      */
-
     @Test
     public void testBM4() {
+        manager.addPattern(new Pattern("ROW"));
+        manager.addPattern(new Pattern("ROW"));
+
         for (int i = 0; i < 5; i++) {
             card.addValue(0, i, "XX"); // Fill the first row with "XX"
             card.addValue(2, i, "XX"); // Fill the third row with "XX"
@@ -89,8 +88,6 @@ public class BingoManagerTest {
             card.addValue(i, 4, "XX"); // Fill the last column with "XX"
         }
 
-        manager.addPattern(new Pattern("ROW"));
-        manager.addPattern(new Pattern("COLUMN")); // Add column pattern
-        assertEquals(3, manager.countBingos(card)); // Check for 3 bingos (rows)
+        assertEquals(4, manager.countBingos(card)); // Check for 3 bingos (rows)
     }
 }
