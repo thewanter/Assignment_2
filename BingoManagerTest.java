@@ -75,7 +75,7 @@ public class BingoManagerTest {
     @Test
     public void testBM4() {
         manager.addPattern(new Pattern("ROW"));
-        manager.addPattern(new Pattern("ROW"));
+        manager.addPattern(new Pattern("COLUMN"));
 
         for (int i = 0; i < 5; i++) {
             card.addValue(0, i, "XX"); // Fill the first row with "XX"
@@ -83,11 +83,30 @@ public class BingoManagerTest {
             card.addValue(4, i, "XX"); // Fill the last row with "XX"
         }
 
-        BingoManager manager = new BingoManager();
         for (int i = 0; i < 5; i++) {
             card.addValue(i, 4, "XX"); // Fill the last column with "XX"
         }
 
-        assertEquals(4, manager.countBingos(card)); // Check for 3 bingos (rows)
+        assertEquals(4, manager.countBingos(card)); // Check for 3 bingos (rows) and 1 bingo (column)
+    }
+
+    /**
+     * BM5: full card marked
+     * Test the countBingos method for a BingoCard with all rows and columns fully
+     * marked.
+     */
+    @Test
+    public void testBM5() {
+        manager.addPattern(new Pattern("ROW"));
+        manager.addPattern(new Pattern("COLUMN"));
+        manager.addPattern(new Pattern("DIAGONAL"));
+
+        for (int i = 0; i < 5; i++) {
+            for (int j = 0; j < 5; j++) {
+                card.addValue(i, j, "XX"); // Fill the entire card with "XX"
+            }
+        }
+
+        assertEquals(12, manager.countBingos(card)); // Check for 5 bingos (rows)
     }
 }
