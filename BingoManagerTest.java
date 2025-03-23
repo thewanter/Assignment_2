@@ -151,4 +151,28 @@ public class BingoManagerTest {
 
         assertEquals(10, manager.countBingos(card));
     }
+
+    /**
+     * BM8: full card marked except for 2nd row, 2nd column
+     * Test the countBingos method for a BingoCard with all rows and columns fully
+     */
+    @Test
+    public void testBM8() {
+        manager.addPattern(new Pattern("ROW"));
+        manager.addPattern(new Pattern("COLUMN"));
+        manager.addPattern(new Pattern("DIAGONAL"));
+        manager.addPattern(new Pattern("CUSTOM"));
+
+        // Mark full card
+        for (int i = 0; i < 5; i++) {
+            for (int j = 0; j < 5; j++) {
+                card.addValue(i, j, "XX");
+            }
+        }
+
+        // Unmark 2nd row, 2nd column
+        card.addValue(1, 1, "I7");
+
+        assertEquals(11, manager.countBingos(card));
+    }
 }

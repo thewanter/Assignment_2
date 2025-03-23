@@ -59,7 +59,6 @@ public class PatternTest {
      */
     @Test
     public void testP3() {
-        card.display();
         for (int j = 0; j < 5; j++) {
             card.addValue(4, j, "XX");
         }
@@ -73,7 +72,6 @@ public class PatternTest {
      */
     @Test
     public void testP4() {
-        card.display();
         for (int j = 0; j < 4; j++) {
             card.addValue(0, j, "XX");
         }
@@ -87,7 +85,6 @@ public class PatternTest {
      */
     @Test
     public void testP5() {
-        card.display();
         for (int i = 0; i < 5; i++) {
             card.addValue(i, 0, "XX");
         }
@@ -101,7 +98,6 @@ public class PatternTest {
      */
     @Test
     public void testP6() {
-        card.display();
         for (int i = 0; i < 5; i++) {
             card.addValue(i, 3, "XX");
         }
@@ -115,7 +111,6 @@ public class PatternTest {
      */
     @Test
     public void testP7() {
-        card.display();
         for (int i = 0; i < 5; i++) {
             card.addValue(i, 4, "XX");
         }
@@ -130,7 +125,6 @@ public class PatternTest {
      */
     @Test
     public void testP8() {
-        card.display();
         for (int i = 0; i < 5; i++) {
             card.addValue(0, i, "XX"); // Fill the first row with "XX"
         }
@@ -145,7 +139,6 @@ public class PatternTest {
      * not
      */
     public void testP9() {
-        card.display();
         for (int i = 0; i < 5; i++) {
             if (i == 1)
                 continue; // Skip the 2nd row
@@ -162,7 +155,6 @@ public class PatternTest {
      */
     @Test
     public void testP10() {
-        card.display();
         for (int i = 0; i < 5; i++) {
             card.addValue(i, 4 - i, "XX"); // Fill the diagonal from top-left to bottom-right
         }
@@ -176,7 +168,6 @@ public class PatternTest {
      */
     @Test
     public void testP11() {
-        card.display();
         for (int i = 0; i < 5; i++) {
             card.addValue(i, i, "XX"); // Fill the diagonal from top-left to bottom-right
         }
@@ -191,7 +182,6 @@ public class PatternTest {
      */
     @Test
     public void testP12() {
-        card.display();
         for (int i = 0; i < 5; i++) {
             card.addValue(1, i, "XX");
         }
@@ -206,7 +196,6 @@ public class PatternTest {
      */
     @Test
     public void testP13() {
-        card.display();
         for (int i = 0; i < 5; i++) {
             card.addValue(0, i, "XX");
         }
@@ -225,7 +214,6 @@ public class PatternTest {
      */
     @Test
     public void testP14() {
-        card.display();
         for (int i = 0; i < 5; i++) {
             for (int j = 0; j < 5; j++) {
                 card.addValue(i, j, "XX");
@@ -242,7 +230,6 @@ public class PatternTest {
      */
     @Test
     public void testP15() {
-        card.display();
         for (int i = 0; i < 5; i++) {
             if (i == 2)
                 continue; // Skip the middle row
@@ -260,7 +247,6 @@ public class PatternTest {
      */
     @Test
     public void testP16() {
-        card.display();
         for (int i = 0; i < 5; i++) {
             card.addValue(0, i, "XX"); // Fill the top row
             card.addValue(4, i, "XX"); // Fill the bottom row
@@ -277,7 +263,6 @@ public class PatternTest {
      */
     @Test
     public void testP17() {
-        card.display();
         for (int i = 0; i < 5; i++) {
             for (int j = 0; j < 5; j++) {
                 if (i == 4 && j == 4)
@@ -289,4 +274,20 @@ public class PatternTest {
         assertFalse(pattern.matches(card), "Pattern should match the filled custom (P17)");
     }
 
+    /**
+     * P18: Entire card fully marked top left corner
+     * 
+     */
+    @Test
+    public void testP18() {
+        for (int i = 0; i < 5; i++) {
+            for (int j = 0; j < 5; j++) {
+                if (i == 0 && j == 0)
+                    continue; // Skip the top left corner
+                card.addValue(i, j, "XX");
+            }
+        }
+        Pattern pattern = new Pattern("CUSTOM");
+        assertFalse(pattern.matches(card), "Pattern should match the filled custom (P18)");
+    }
 }

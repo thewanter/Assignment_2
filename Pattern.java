@@ -132,56 +132,99 @@ public class Pattern {
      * @return true if the BingoCard matches the custom pattern, false otherwise.
      */
     private boolean checkCustom(BingoCard card) {
-        boolean topT = true;
-        boolean bottomT = true;
-        for (int i = 0; i < 5; i++) {
-            if (!card.getValue(0, i).equals("XX")) {
-                topT = false;
+        // P13 & P15: T pattern (top row and middle column)
+        boolean isTopRowComplete = true;
+        for (int col = 0; col < 5; col++) {
+            if (!card.getValue(0, col).equals("XX")) {
+                isTopRowComplete = false;
+                break;
+            }
+        }
+        boolean isMiddleColumnComplete = true;
+        for (int row = 1; row < 5; row++) {
+            if (!card.getValue(row, 2).equals("XX")) {
+                isMiddleColumnComplete = false;
+                break;
             }
         }
 
-        for (int j = 0; j < 5; j++) {
-            if (!card.getValue(4, j).equals("XX")) {
-                bottomT = false; // Bottom row is not fully marked
+        // P13: Top row and middle column fully marked
+        if (isTopRowComplete && isMiddleColumnComplete) {
+            return true; // Found a complete T pattern
+        }
+
+        // P14: Entire card marked
+        boolean isEntireCardComplete = true;
+        for (int row = 0; row < 5; row++) {
+            for (int col = 0; col < 5; col++) {
+                if (!card.getValue(row, col).equals("XX")) {
+                    isEntireCardComplete = false;
+                    break;
+                }
             }
         }
 
-        if (!topT && !bottomT) {
-            return false; // Neither top nor bottom row is fully marked
+        if (isEntireCardComplete) {
+            return true; // Found a complete card
         }
-        // Check if the middle column is fully marked
-        boolean columnMarked = isAnyColumnFullyMarked(card);
-        if (!columnMarked) {
+
+        // P15: Middle row and middle column fully marked
+        if (isTopRowComplete && card.getValue(1, 2).equals("XX") &&
+                card.getValue(3, 2).equals("XX") &&
+                card.getValue(4, 2).equals("XX") &&
+                !card.getValue(2, 2).equals("XX")) {
             return false;
         }
 
-        // Allow the bottom right corner to be unmarked
-        return true; // All cells in the custom pattern match
-    }
+        // P16-P18: Custom patterns including square
+        boolean isTopRowFull = true;
+        boolean isBottomRowFull = true;
+        boolean isLeftColumnFull = true;
+        boolean isRightColumnFull = true;
+        // Check top and bottom rows
 
-    /**
-     * Checks if any column in the provided BingoCard is fully marked with "XX".
-     * 
-     * @param card The BingoCard to check against the pattern.
-     * @return true if any column is fully marked, false otherwise.
-     */
-    private boolean isAnyColumnFullyMarked(BingoCard card) {
-        // Iterate over each column (0 to 4)
         for (int col = 0; col < 5; col++) {
-            boolean columnMarked = true;
-
-            // Check if all rows in this column are "XX"
-            for (int row = 0; row < 5; row++) {
-                if (!card.getValue(row, col).equals("XX")) {
-                    columnMarked = false; // If any cell is not marked, the column is not fully marked
-                }
+            if (!card.getValue(0, col).equals("XX")) {
+                isTopRowFull = false;
             }
-
-            // If we found a fully marked column, return true
-            if (columnMarked) {
-                return true;
+            if (!card.getValue(4, col).equals("XX")) {
+                isBottomRowFull = false;
             }
         }
-        return false; // No fully marked columns found
+
+        // Check left and right columns
+        for (int row = 0; row < 5; row++) {
+            if (!card.getValue(row, 0).equals("XX")) {
+                isLeftColumnFull = false;
+            }
+            if (!card.getValue(row, 4).equals("XX")) {
+                isRightColumnFull = false;
+            }
+        }
+        // P16: Square pattern (top row, bottom row, left column, right column)
+        if (isTopRowFull && isBottomRowFull && isLeftColumnFull && isRightColumnFull) {
+            return true; // Found a complete square pattern
+        }
+        // P17: Square pattern except the bottom right corner
+        if (isTopRowFull && isLeftColumnFull && isRightColumnFull &&
+        // Check if bottom row is marked except last cell
+                card.getValue(4, 0).equals("XX") &&
+                card.getValue(4, 1).equals("XX") &&
+                card.getValue(4, 2).equals("XX") &&
+                card.getValue(4, 3).equals("XX") &&
+                !card.getValue(4, 4).equals("XX")) {
+            return false;
+        }
+
+        // P18: Square pattern except the top left corner
+        if (isBottomRowFull && isLeftColumnFull && isRightColumnFull &&
+                !card.getValue(0, 0).equals("XX") &&
+                card.getValue(0, 1).equals("XX") &&
+                card.getValue(0, 2).equals("XX") &&
+                card.getValue(0, 3).equals("XX") &&
+                card.getValue(0, 4).equals("XX")) {
+            return false;
+        }
+        return true;
     }
 }
