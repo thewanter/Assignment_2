@@ -162,6 +162,9 @@ public class Pattern {
                     break;
                 }
             }
+            if (!isEntireCardComplete) {
+                break; // Exit if any cell is not marked
+            }
         }
 
         if (isEntireCardComplete) {
@@ -215,7 +218,6 @@ public class Pattern {
                 !card.getValue(4, 4).equals("XX")) {
             return false;
         }
-
         // P18: Square pattern except the top left corner
         if (isBottomRowFull && isLeftColumnFull && isRightColumnFull &&
                 !card.getValue(0, 0).equals("XX") &&
@@ -225,6 +227,6 @@ public class Pattern {
                 card.getValue(0, 4).equals("XX")) {
             return false;
         }
-        return true;
+        return false; // No custom pattern matched
     }
 }

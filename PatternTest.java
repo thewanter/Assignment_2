@@ -138,6 +138,7 @@ public class PatternTest {
      * row. This test checks if the pattern correctly identifies a column that is
      * not
      */
+    @Test
     public void testP9() {
         for (int i = 0; i < 5; i++) {
             if (i == 1)
@@ -258,8 +259,8 @@ public class PatternTest {
     }
 
     /**
-     * P17: Entire card fully marked except the bottom right corner
-     * 
+     * P17: Entire card fully marked except for bottom right corner
+     * Tests that an incomplete custom pattern does not match
      */
     @Test
     public void testP17() {
@@ -271,11 +272,11 @@ public class PatternTest {
             }
         }
         Pattern pattern = new Pattern("CUSTOM");
-        assertFalse(pattern.matches(card), "Pattern should match the filled custom (P17)");
+        assertFalse(pattern.matches(card), "Pattern should not match with missing bottom right corner (P17)");
     }
 
     /**
-     * P18: Entire card fully marked top left corner
+     * P18: Entire card fully marked except the top left corner
      * 
      */
     @Test
