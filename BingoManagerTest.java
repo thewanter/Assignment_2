@@ -109,4 +109,24 @@ public class BingoManagerTest {
 
         assertEquals(12, manager.countBingos(card)); // Check for 5 bingos (rows)
     }
+
+    /**
+     * BM6: full card marked with custom pattern
+     */
+    @Test
+    public void testBM6() {
+        manager.addPattern(new Pattern("ROW"));
+        manager.addPattern(new Pattern("COLUMN"));
+        manager.addPattern(new Pattern("DIAGONAL"));
+        manager.addPattern(new Pattern("CUSTOM")); // Add custom pattern
+
+        for (int i = 0; i < 5; i++) {
+            for (int j = 0; j < 5; j++) {
+                card.addValue(i, j, "XX"); // Fill the entire card with "XX"
+            }
+        }
+
+        assertEquals(14, manager.countBingos(card));
+    }
+
 }

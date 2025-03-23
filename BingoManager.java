@@ -19,11 +19,15 @@ public class BingoManager {
     }
 
     /**
-     * Counts the number of bingos in a given BingoCard based on the patterns
-     * managed by this BingoManager.
+     * Counts the number of bingos in the provided BingoCard based on the
+     * patterns added to the BingoManager.
      * 
      * @param card The BingoCard to check for bingos.
-     * @return The number of bingos found in the card.
+     *             The method checks each pattern and counts how many times it
+     *             matches
+     * @return The total number of bingos found in the BingoCard.
+     *         It checks for rows, columns, diagonals, and any custom patterns
+     *         defined.
      */
     public int countBingos(BingoCard card) {
         int count = 0;
@@ -76,6 +80,41 @@ public class BingoManager {
             } else if (type.equals("CUSTOM")) {
                 // Implement custom pattern logic here
                 boolean topRowComplete = true;
+                for (int k = 0; k < 5; k++) {
+                    if (!card.getValue(0, k).equals("XX")) {
+                        topRowComplete = false;
+                        break;
+                    }
+                }
+
+                boolean middleColumnComplete = true;
+                for (int l = 0; l < 5; l++) {
+                    if (!card.getValue(l, 2).equals("XX")) {
+                        middleColumnComplete = false;
+                        break;
+                    }
+                }
+
+                if (topRowComplete && middleColumnComplete) {
+                    count++;
+                }
+
+                // check for square pattern (2x2)
+                boolean squareComplete = true;
+                for (int m = 0; m < 2; m++) {
+                    for (int n = 0; n < 2; n++) {
+                        if (!card.getValue(m, n).equals("XX")) {
+                            squareComplete = false;
+                            break;
+                        }
+                    }
+                    if (!squareComplete) {
+                        break;
+                    }
+                    if (squareComplete) {
+                        count++;
+                    }
+                }
             }
         }
         return count;
