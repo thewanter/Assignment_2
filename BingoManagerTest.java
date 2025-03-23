@@ -129,4 +129,26 @@ public class BingoManagerTest {
         assertEquals(14, manager.countBingos(card));
     }
 
+    /**
+     * BM7: full card marked with except for top right corner
+     * Test the countBingos method for a BingoCard with all rows and columns fully
+     */
+    @Test
+    public void testBM7() {
+        manager.addPattern(new Pattern("ROW"));
+        manager.addPattern(new Pattern("COLUMN"));
+        manager.addPattern(new Pattern("DIAGONAL"));
+        manager.addPattern(new Pattern("CUSTOM")); // Add custom pattern
+
+        for (int i = 0; i < 5; i++) {
+            for (int j = 0; j < 5; j++) {
+                if (i == 0 && j == 4) {
+                    continue; // Skip the top right corner
+                }
+                card.addValue(i, j, "XX"); // Fill the entire card with "XX"
+            }
+        }
+
+        assertEquals(10, manager.countBingos(card));
+    }
 }
