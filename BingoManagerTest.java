@@ -71,4 +71,26 @@ public class BingoManagerTest {
         manager.addPattern(new Pattern("ROW"));
         assertEquals(3, manager.countBingos(card)); // Check for 3 bingos (rows)
     }
+
+    /**
+     * BM4: 1st, 3rd, and last row fully marked and last column fully marked
+     */
+
+    @Test
+    public void testBM4() {
+        for (int i = 0; i < 5; i++) {
+            card.addValue(0, i, "XX"); // Fill the first row with "XX"
+            card.addValue(2, i, "XX"); // Fill the third row with "XX"
+            card.addValue(4, i, "XX"); // Fill the last row with "XX"
+        }
+
+        BingoManager manager = new BingoManager();
+        for (int i = 0; i < 5; i++) {
+            card.addValue(i, 4, "XX"); // Fill the last column with "XX"
+        }
+
+        manager.addPattern(new Pattern("ROW"));
+        manager.addPattern(new Pattern("COLUMN")); // Add column pattern
+        assertEquals(3, manager.countBingos(card)); // Check for 3 bingos (rows)
+    }
 }

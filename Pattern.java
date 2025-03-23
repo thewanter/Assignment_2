@@ -174,7 +174,6 @@ public class Pattern {
             for (int row = 0; row < 5; row++) {
                 if (!card.getValue(row, col).equals("XX")) {
                     columnMarked = false; // If any cell is not marked, the column is not fully marked
-                    break;
                 }
             }
 
