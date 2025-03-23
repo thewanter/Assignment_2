@@ -111,9 +111,9 @@ public class BingoManager {
                     if (!squareComplete) {
                         break;
                     }
-                    if (squareComplete) {
-                        count++;
-                    }
+                }
+                if (squareComplete) {
+                    count++;
                 }
             }
         }
