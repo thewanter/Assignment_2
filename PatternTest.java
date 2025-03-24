@@ -1,10 +1,12 @@
 import static org.junit.jupiter.api.Assertions.*;
-
-import javax.smartcardio.Card;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+/**
+ * @author: Thanh An Vu
+ * @description: This class contains unit tests for the Pattern class, which is
+ *               responsible for checking various patterns on a BingoCard.
+ */
 public class PatternTest {
 
     BingoCard card = new BingoCard("1");

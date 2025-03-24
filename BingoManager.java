@@ -1,9 +1,17 @@
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * @author: Thanh An Vu
+ * @description: This class manages the Bingo patterns and counts the number of
+ *               bingos in a BingoCard based on the defined patterns.
+ */
 public class BingoManager {
     private List<Pattern> patterns;
 
+    /**
+     * Constructs a BingoManager object.
+     */
     public BingoManager() {
         this.patterns = new ArrayList<>();
     }
@@ -98,25 +106,49 @@ public class BingoManager {
                 if (topRowComplete && middleColumnComplete) {
                     count++;
                 }
-
-                // check for square pattern (2x2)
-                boolean squareComplete = true;
-                for (int m = 0; m < 2; m++) {
-                    for (int n = 0; n < 2; n++) {
-                        if (!card.getValue(m, n).equals("XX")) {
-                            squareComplete = false;
-                            break;
-                        }
-                    }
-                    if (!squareComplete) {
-                        break;
-                    }
-                }
-                if (squareComplete) {
+                // check for square patter
+                if (checkSquarePattern(card)) {
                     count++;
                 }
             }
         }
         return count;
+    }
+
+    /**
+     * Checks if the provided BingoCard has a square pattern.
+     * A square pattern is defined as having the top and bottom rows with left
+     * column and right column fully marked with "XX".
+     * 
+     * @param card
+     * @return
+     */
+    public boolean checkSquarePattern(BingoCard card) {
+        boolean isTopRowFull = true;
+        boolean isBottomRowFull = true;
+        boolean isLeftColumnFull = true;
+        boolean isRightColumnFull = true;
+        // Check top and bottom rows
+        for (int col = 0; col < 5; col++) {
+            if (!card.getValue(0, col).equals("XX")) {
+                isTopRowFull = false;
+            }
+            if (!card.getValue(4, col).equals("XX")) {
+                isBottomRowFull = false;
+            }
+        }
+        // Check left and right columns
+        for (int row = 0; row < 5; row++) {
+            if (!card.getValue(row, 0).equals("XX")) {
+                isLeftColumnFull = false;
+            }
+            if (!card.getValue(row, 4).equals("XX")) {
+                isRightColumnFull = false;
+            }
+        }
+        if (isTopRowFull && isBottomRowFull && isLeftColumnFull && isRightColumnFull) {
+            return true; // Found a complete square pattern
+        }
+        return false;
     }
 }

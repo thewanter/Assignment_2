@@ -1,7 +1,15 @@
 import java.util.List;
 
+/**
+ * @author: Thanh An Vu
+ * @description: This class represents a Bingo pattern and provides methods to
+ *               check
+ *               if a BingoCard matches the specified pattern. It supports
+ *               various patterns
+ *               such as rows, columns, diagonals, and custom patterns.
+ */
 public class Pattern {
-    private String type; // Type of the pattern (e.g., "ROW", "COLUMN", "DIAGONAL", "CUSTOM")
+    private String type;
     private List<int[]> pattern;
 
     /**

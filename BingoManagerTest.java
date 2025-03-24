@@ -3,6 +3,11 @@ import static org.junit.Assert.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+/**
+ * @author Thanh An Vu
+ * @description This class tests the functionality of the BingoManager class,
+ *              specifically the countBingos method.
+ */
 public class BingoManagerTest {
     private BingoManager manager;
     private BingoCard card;
@@ -52,6 +57,9 @@ public class BingoManagerTest {
         assertEquals(3, manager.countBingos(card));
     }
 
+    /**
+     * 1st, 3rd, and last row fully marked and last column fully marked
+     */
     @Test
     public void testBM3() {
         manager.addPattern(new Pattern("ROW"));
@@ -92,8 +100,6 @@ public class BingoManagerTest {
 
     /**
      * BM5: full card marked
-     * Test the countBingos method for a BingoCard with all rows and columns fully
-     * marked.
      */
     @Test
     public void testBM5() {
@@ -106,8 +112,8 @@ public class BingoManagerTest {
                 card.addValue(i, j, "XX"); // Fill the entire card with "XX"
             }
         }
-
-        assertEquals(12, manager.countBingos(card)); // Check for 5 bingos (rows)
+        assertEquals(12, manager.countBingos(card)); // Check for 5 bingos (rows) + 5 bingos (columns) + 2 bingos
+                                                     // (diagonals)
     }
 
     /**
@@ -149,7 +155,7 @@ public class BingoManagerTest {
             }
         }
 
-        assertEquals(10, manager.countBingos(card));
+        assertEquals(9, manager.countBingos(card));
     }
 
     /**
