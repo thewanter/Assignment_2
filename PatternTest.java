@@ -1,4 +1,7 @@
 import static org.junit.jupiter.api.Assertions.*;
+
+import javax.smartcardio.Card;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -37,7 +40,7 @@ public class PatternTest {
         }
 
         Pattern pattern = new Pattern("ROW");
-        assertTrue(pattern.matches(card), "Pattern should match the filled row (P1)");
+        assertTrue(pattern.matches(card, ""), "Pattern should match the filled row (P1)");
     }
 
     /**
@@ -50,7 +53,7 @@ public class PatternTest {
             card.addValue(2, j, "XX");
         }
         Pattern pattern = new Pattern("ROW");
-        assertTrue(pattern.matches(card), "Pattern should match the filled row (P2)");
+        assertTrue(pattern.matches(card, ""), "Pattern should match the filled row (P2)");
     }
 
     /**
@@ -63,7 +66,7 @@ public class PatternTest {
             card.addValue(4, j, "XX");
         }
         Pattern pattern = new Pattern("ROW");
-        assertTrue(pattern.matches(card), "Pattern should match the filled row (P3)");
+        assertTrue(pattern.matches(card, ""), "Pattern should match the filled row (P3)");
     }
 
     /**
@@ -76,7 +79,7 @@ public class PatternTest {
             card.addValue(0, j, "XX");
         }
         Pattern pattern = new Pattern("ROW");
-        assertFalse(pattern.matches(card), "Pattern should match the filled row (P4)");
+        assertFalse(pattern.matches(card, ""), "Pattern should match the filled row (P4)");
     }
 
     /**
@@ -89,7 +92,7 @@ public class PatternTest {
             card.addValue(i, 0, "XX");
         }
         Pattern pattern = new Pattern("COLUMN");
-        assertTrue(pattern.matches(card), "Pattern should match the filled column (P5)");
+        assertTrue(pattern.matches(card, ""), "Pattern should match the filled column (P5)");
     }
 
     /**
@@ -102,7 +105,7 @@ public class PatternTest {
             card.addValue(i, 3, "XX");
         }
         Pattern pattern = new Pattern("COLUMN");
-        assertTrue(pattern.matches(card), "Pattern should match the filled column (P6)");
+        assertTrue(pattern.matches(card, ""), "Pattern should match the filled column (P6)");
     }
 
     /**
@@ -115,7 +118,7 @@ public class PatternTest {
             card.addValue(i, 4, "XX");
         }
         Pattern pattern = new Pattern("COLUMN");
-        assertTrue(pattern.matches(card), "Pattern should match the filled column (P7)");
+        assertTrue(pattern.matches(card, ""), "Pattern should match the filled column (P7)");
     }
 
     /**
@@ -129,7 +132,7 @@ public class PatternTest {
             card.addValue(0, i, "XX"); // Fill the first row with "XX"
         }
         Pattern pattern = new Pattern("COLUMN");
-        assertFalse(pattern.matches(card), "Pattern should match the filled column (P8)");
+        assertFalse(pattern.matches(card, ""), "Pattern should match the filled column (P8)");
     }
 
     /**
@@ -146,7 +149,7 @@ public class PatternTest {
             card.addValue(i, 1, "XX");
         }
         Pattern pattern = new Pattern("COLUMN");
-        assertFalse(pattern.matches(card), "Pattern should match the filled column (P9)");
+        assertFalse(pattern.matches(card, ""), "Pattern should match the filled column (P9)");
     }
 
     /**
@@ -160,7 +163,7 @@ public class PatternTest {
             card.addValue(i, 4 - i, "XX"); // Fill the diagonal from top-left to bottom-right
         }
         Pattern pattern = new Pattern("DIAGONAL");
-        assertTrue(pattern.matches(card), "Pattern should match the filled diagonal (P10)");
+        assertTrue(pattern.matches(card, ""), "Pattern should match the filled diagonal (P10)");
     }
 
     /**
@@ -173,7 +176,7 @@ public class PatternTest {
             card.addValue(i, i, "XX"); // Fill the diagonal from top-left to bottom-right
         }
         Pattern pattern = new Pattern("DIAGONAL");
-        assertTrue(pattern.matches(card), "Pattern should match the filled diagonal (P11)");
+        assertTrue(pattern.matches(card, ""), "Pattern should match the filled diagonal (P11)");
     }
 
     /**
@@ -187,7 +190,7 @@ public class PatternTest {
             card.addValue(1, i, "XX");
         }
         Pattern pattern = new Pattern("DIAGONAL");
-        assertFalse(pattern.matches(card), "Pattern should match the filled diagonal (P12)");
+        assertFalse(pattern.matches(card, ""), "Pattern should match the filled diagonal (P12)");
     }
 
     /**
@@ -205,7 +208,7 @@ public class PatternTest {
             card.addValue(j, 2, "XX");
         }
         Pattern pattern = new Pattern("CUSTOM");
-        assertTrue(pattern.matches(card), "Pattern should match the filled custom (P13)");
+        assertTrue(pattern.matches(card, "TPATTERN"), "Pattern should match the filled custom (P13)");
     }
 
     /**
@@ -221,7 +224,7 @@ public class PatternTest {
             }
         }
         Pattern pattern = new Pattern("CUSTOM");
-        assertTrue(pattern.matches(card), "Pattern should match the filled custom (P14)");
+        assertTrue(pattern.matches(card, "TPATTERN"), "Pattern should match the filled custom (P14)");
     }
 
     /**
@@ -239,7 +242,7 @@ public class PatternTest {
             }
         }
         Pattern pattern = new Pattern("CUSTOM");
-        assertFalse(pattern.matches(card), "Pattern should match the filled custom (P15)");
+        assertFalse(pattern.matches(card, "TPATTERN"), "Pattern should match the filled custom (P15)");
     }
 
     /**
@@ -255,7 +258,7 @@ public class PatternTest {
             card.addValue(i, 4, "XX"); // Fill the right column
         }
         Pattern pattern = new Pattern("CUSTOM");
-        assertTrue(pattern.matches(card), "Pattern should match the filled custom (P16)");
+        assertTrue(pattern.matches(card, "SQUAREPATTERN"), "Pattern should match the filled custom (P16)");
     }
 
     /**
@@ -266,13 +269,16 @@ public class PatternTest {
     public void testP17() {
         for (int i = 0; i < 5; i++) {
             for (int j = 0; j < 5; j++) {
-                if (i == 4 && j == 4)
+                if (i == 4 && j == 4) {
                     continue; // Skip the bottom right corner
-                card.addValue(i, j, "XX");
+                }
+                card.addValue(i, j, "XX"); // Fill the rest of the card
             }
         }
+        card.addValue(4, 4, "12");
         Pattern pattern = new Pattern("CUSTOM");
-        assertFalse(pattern.matches(card), "Pattern should not match with missing bottom right corner (P17)");
+        assertFalse(pattern.matches(card, "SQUAREPATTERN"),
+                "Pattern should not match with missing bottom right corner (P17)");
     }
 
     /**
@@ -289,6 +295,6 @@ public class PatternTest {
             }
         }
         Pattern pattern = new Pattern("CUSTOM");
-        assertFalse(pattern.matches(card), "Pattern should match the filled custom (P18)");
+        assertFalse(pattern.matches(card, "SQUAREPATTERN"), "Pattern should match the filled custom (P18)");
     }
 }

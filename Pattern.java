@@ -39,7 +39,7 @@ public class Pattern {
      * @return correct functionality of the pattern
      * @throws IllegalArgumentException if the pattern type is invalid.
      */
-    public boolean matches(BingoCard card) {
+    public boolean matches(BingoCard card, String pattern) {
         switch (type) {
             case "ROW":
                 return checkRows(card);
@@ -48,7 +48,7 @@ public class Pattern {
             case "DIAGONAL":
                 return checkDiagonals(card);
             case "CUSTOM":
-                return checkCustom(card);
+                return checkCustom(card, pattern);
             default:
                 throw new IllegalArgumentException("Invalid pattern type: " + type);
         }
@@ -131,7 +131,17 @@ public class Pattern {
      * @param card The BingoCard to check against the custom pattern.
      * @return true if the BingoCard matches the custom pattern, false otherwise.
      */
-    private boolean checkCustom(BingoCard card) {
+    private boolean checkCustom(BingoCard card, String type) {
+        if (type.equals("TPATTERN")) {
+            return checkTPattern(card);
+        } else if (type.equals("SQUAREPATTERN")) {
+            return checkSquarePattern(card);
+        } else {
+            return checkTPattern(card) && checkSquarePattern(card);
+        }
+    }
+
+    public boolean checkTPattern(BingoCard card) {
         // P13 & P15: T pattern (top row and middle column)
         boolean isTopRowComplete = true;
         for (int col = 0; col < 5; col++) {
@@ -152,40 +162,15 @@ public class Pattern {
         if (isTopRowComplete && isMiddleColumnComplete) {
             return true; // Found a complete T pattern
         }
+        return false;
+    }
 
-        // P14: Entire card marked
-        boolean isEntireCardComplete = true;
-        for (int row = 0; row < 5; row++) {
-            for (int col = 0; col < 5; col++) {
-                if (!card.getValue(row, col).equals("XX")) {
-                    isEntireCardComplete = false;
-                    break;
-                }
-            }
-            if (!isEntireCardComplete) {
-                break; // Exit if any cell is not marked
-            }
-        }
-
-        if (isEntireCardComplete) {
-            return true; // Found a complete card
-        }
-
-        // P15: Middle row and middle column fully marked
-        if (isTopRowComplete && card.getValue(1, 2).equals("XX") &&
-                card.getValue(3, 2).equals("XX") &&
-                card.getValue(4, 2).equals("XX") &&
-                !card.getValue(2, 2).equals("XX")) {
-            return false;
-        }
-
-        // P16-P18: Custom patterns including square
+    public boolean checkSquarePattern(BingoCard card) {
         boolean isTopRowFull = true;
         boolean isBottomRowFull = true;
         boolean isLeftColumnFull = true;
         boolean isRightColumnFull = true;
         // Check top and bottom rows
-
         for (int col = 0; col < 5; col++) {
             if (!card.getValue(0, col).equals("XX")) {
                 isTopRowFull = false;
@@ -194,7 +179,6 @@ public class Pattern {
                 isBottomRowFull = false;
             }
         }
-
         // Check left and right columns
         for (int row = 0; row < 5; row++) {
             if (!card.getValue(row, 0).equals("XX")) {
@@ -204,29 +188,9 @@ public class Pattern {
                 isRightColumnFull = false;
             }
         }
-        // P16: Square pattern (top row, bottom row, left column, right column)
         if (isTopRowFull && isBottomRowFull && isLeftColumnFull && isRightColumnFull) {
             return true; // Found a complete square pattern
         }
-        // P17: Square pattern except the bottom right corner
-        if (isTopRowFull && isLeftColumnFull && isRightColumnFull &&
-        // Check if bottom row is marked except last cell
-                card.getValue(4, 0).equals("XX") &&
-                card.getValue(4, 1).equals("XX") &&
-                card.getValue(4, 2).equals("XX") &&
-                card.getValue(4, 3).equals("XX") &&
-                !card.getValue(4, 4).equals("XX")) {
-            return false;
-        }
-        // P18: Square pattern except the top left corner
-        if (isBottomRowFull && isLeftColumnFull && isRightColumnFull &&
-                !card.getValue(0, 0).equals("XX") &&
-                card.getValue(0, 1).equals("XX") &&
-                card.getValue(0, 2).equals("XX") &&
-                card.getValue(0, 3).equals("XX") &&
-                card.getValue(0, 4).equals("XX")) {
-            return false;
-        }
-        return false; // No custom pattern matched
+        return false;
     }
 }
